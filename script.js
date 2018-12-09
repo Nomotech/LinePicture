@@ -6,8 +6,8 @@
 // see https://opensource.org/licenses/MIT
 // ============================================
 
-const WIDTH  = 640 * 2
-const HEIGHT = 480 * 2
+const WIDTH  = 640 * 1.5
+const HEIGHT = 480 * 1.5
 const N = 2
 const M = 6
 
@@ -76,13 +76,22 @@ let loop = (t) => {
   ctx.save()
   t += 40
   if (t > Varray.length && t > Harray.length) {
-    t = 0
-    for(let i = 0; i < imageData.data.length; i++) imageData.data[i] = 255
+    // t = 0
+    // for(let i = 0; i < imageData.data.length; i++) imageData.data[i] = 255
+  } else {
+    setTimeout(`loop(${t})`, 1)
   }
-  // console.log(t)
-  // console.log(array)
-  setTimeout(`loop(${t})`, 1)
   // requestAnimationFrame(loop)
+}
+
+let sortLine = (data) => {
+  data = data.sort((a, b) => {
+    let x = a.len;
+    let y = b.len;
+    if (x > y) return -1;
+    if (x < y) return 1;
+    return 0;
+  })
 }
 
 
@@ -122,25 +131,39 @@ window.onload = async () => {
   reversal(array)
 
 
-  for (let i = 0; i < M; i++) {
-    for (let y = N + i; y < HEIGHT - 1; y += M) {
-      for (let x = N; x < WIDTH - 1; x++) {
-        if (imageDataH.data[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
-          index = ((x + 1) + (y + 1) * WIDTH) * 4
-          Harray.push(index, index+1, index+2)
-        }
-      }
-    }
-
-    for (let x = N + i; x < WIDTH - 1; x += M) {
-      for (let y = N; y < HEIGHT - 1; y++) {
-        if (imageDataV.data[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
-          index = ((x + 1) + (y + 1) * WIDTH) * 4
-          Varray.push(index, index+1, index+2)
-        }
+  let len = 0
+  let line = { len : 0, array : [] }
+  let lineList = []
+  for (let y = N + 1; y < HEIGHT - 1; y += 1) {
+    for (let x = N + 1; x < WIDTH - 1; x++) {
+      if (imageDataH.data[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
+        index = ((x + 1) + (y + 1) * WIDTH) * 4
+        line.len++;
+        line.array.push(index, index+1, index+2)
+      } else if (line.len > 0) {
+        lineList.push({len:line.len, array:line.array})
+        line = {len: 0, array: []}
       }
     }
   }
+  sortLine(lineList)
+  for (let l of lineList) Harray = Harray.concat(l.array)
+
+  for (let x = N + 1; x < WIDTH - 1; x+= 1) {
+    for (let y = N + 1; y < HEIGHT - 1; y ++) {
+      if (imageDataV.data[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
+        index = ((x + 1) + (y + 1) * WIDTH) * 4
+        line.len++;
+        line.array.push(index, index+1, index+2)
+      } else if (line.len > 0) {
+        lineList.push({len:line.len, array:line.array})
+        line = {len: 0, array: []}
+      }
+    }
+  }
+  sortLine(lineList)
+  for (let l of lineList) Varray = Varray.concat(l.array)
+
 
   loop(0)
 
