@@ -1,0 +1,116 @@
+\documentclass[a4j,11pt,twoside]{jarticle}
+\usepackage{listings,jlisting}
+\usepackage{url}
+\usepackage{color}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+
+
+
+\setlength{\textwidth}{1.1\textwidth}
+\setlength{\oddsidemargin}{-3pt}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\topmargin}{0mm}
+\setlength{\headheight}{5mm}
+\setlength{\headsep}{10mm}
+
+
+\pagestyle{fancy}
+\fancyhead{}
+
+
+\fancyfoot{}
+% \fancyfoot[LO]{\thepage}
+% \fancyfoot[RE]{\thepage}
+\fancyfoot[C]{\thepage}
+
+
+\definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
+\definecolor{colFunc}{rgb}{1,0.07,0.54}
+\definecolor{yellow}{rgb}{1,0.7,0.1}
+\definecolor{red}{rgb}{1,0.2,0.1}
+\definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
+\definecolor{Brown}{cmyk}{0,0.81,1,0.60}
+\definecolor{colID}{rgb}{0.63,0.44,0}
+\definecolor{back}{rgb}{0.9,0.97,1.0}
+
+\lstset{
+  breaklines = true,
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  commentstyle={\itshape \color[cmyk]{1,0.4,1,0}},
+  classoffset=1,
+  keywordstyle={\bfseries \color[cmyk]{0,1,0,0}},
+  stringstyle={\ttfamily \color[rgb]{0,0,1}},
+  frame=tRBl,
+  framesep=5pt,
+  showstringspaces=false,
+  numbers=left,
+  stepnumber=1,
+  numberstyle=\tiny,
+  tabsize=2,
+}
+
+
+
+\begin{document}
+
+	\begin{center}
+	{\LARGE \bf{脳の超並列モデル レポート4}}
+	\vspace{1cm}
+
+	{\textrm{15B11330 情報工学科  野元 貴史}}
+	\end{center}
+  \subsection*{概要}
+
+	\subsection*{ソースコード}
+    \lstinputlisting[language=Python,caption=ex4.py]
+    {/home/nomoto/Documents/JT/Parallel_Computing/ex4.py}
+
+    実行環境はUbuntu 16.04 Python 3.5.2 であった。 \\
+
+    \subsubsection*{実装の説明}
+    以下の連立方程式を解くためのRNNを定義し、C、閾値theta、重みｗを計算する。
+
+    \begin{eqnarray*}
+      \begin{cases}
+        x_1 - x_2 - x_3 + x_4 -2 x_5 = 0 &\\
+        2 x_1 + x_3 - x_4 + x_5 = 3 &\\
+        -1 x_1 + 2 x_2 - x_4 + x_5 = -1 &\\
+        -2 x_2 + x_3 - x_4 = 1 &\\
+        x_1 - x_2 + 2 x_3 - x_4 + x_5 = 3
+      \end{cases}
+    \end{eqnarray*}
+
+
+    \begin{eqnarray*}
+    x_n
+     =
+      \begin{cases}
+        0 \rightarrow x_n^2 = 0 \\
+        1 \rightarrow x_n^2 = 1
+      \end{cases}
+    \end{eqnarray*} \\
+
+    より$ x_n = x_n^2 を使って$
+    $$
+    -\frac{1}{2}\sum_{n=1}^{5}\sum_{m=1}^{5} w_{nm}x_nx_m + \sum_{n=1}^{5}\theta_n x_n + C \\
+    $$
+    の形にする
+
+    以下のようにエネルギー関数Eに適切な値を代入すると$C、theta_n、w_{nm}$がもとめられる。
+    \begin{eqnarray*}
+    C &=& E(0,0,...,0) \\
+    \theta_n &=& E(0,0,...,1,...,0) - C \\
+    w_{nm} = w_{mn} &=& - E(0,0,...,0,1,0,...,0,1,0,...,0) + \theta_n + \theta_m + C
+  \end{eqnarray*}
+
+  \subsection*{結果}
+  \begin{center}
+    \includegraphics[width=8cm]{4_1.png}
+  \end{center}
+
+  課題5ではこの値を使って実際にRNNを動かしていく。
+
+\end{document}
