@@ -43,8 +43,8 @@ let makeLinePicData = (Hdata, Vdata) => {
   let len = 0
   let line = { len : 0, array : [] }
   let lineList = []
-  for (let y = N + 2; y < HEIGHT - 2; y += 1) {
-    for (let x = N + 2; x < WIDTH - 2; x++) {
+  for (let y = 2 * N; y < HEIGHT - 2 * N; y += 1) {
+    for (let x = 2 * N; x < WIDTH - 2 * N; x++) {
       if (Hdata[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
         index = ((x + 1) + (y + 1) * WIDTH) * 4
         line.len++;
@@ -61,8 +61,8 @@ let makeLinePicData = (Hdata, Vdata) => {
   lineList = []
 
 
-  for (let x = N + 2; x < WIDTH - 2; x+= 1) {
-    for (let y = N + 2; y < HEIGHT - 2; y ++) {
+  for (let x = 2 * N; x < WIDTH - 2 * N; x+= 1) {
+    for (let y = 2 * N; y < HEIGHT - 2 * N; y ++) {
       if (Vdata[((x + 1) + (y + 1) * WIDTH) * 4] > 0) {
         index = ((x + 1) + (y + 1) * WIDTH) * 4
         line.len++;
