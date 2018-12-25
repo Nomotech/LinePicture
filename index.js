@@ -65,7 +65,7 @@ let main = async (image) => {
 
   // ------------------------------------< V >------------------------------------
   sobelV(imageDataV.data)
-  lineFilterV(imageDataV.data, N, 5)
+  lineFilterV(imageDataV.data, N)
   threshold(imageDataV.data, 20)
 
   // VCtx.globalAlpha = 1
@@ -75,7 +75,7 @@ let main = async (image) => {
 
   // ------------------------------------< H >------------------------------------
   sobelH(imageDataH.data)
-  lineFilterH(imageDataH.data, N, 100)
+  lineFilterH(imageDataH.data, N)
   threshold(imageDataH.data, 20)
 
   // HCtx.globalAlpha = 1
@@ -87,6 +87,8 @@ let main = async (image) => {
   linePicData = makeLinePicData(imageDataH.data, imageDataV.data)
   Harray = linePicData.Harray
   Varray = linePicData.Varray
+  console.log(Harray.length * (2 * N + 1) * (2 * N + 1) / imageData.data.length)
+  console.log(Varray.length * (2 * N + 1) * (2 * N + 1) / imageData.data.length)
 
   linePic = new LinePic(Harray, Varray, ctx)
 }
