@@ -143,7 +143,7 @@ let sobelH = (data) => {
   for (let i = 0; i < data.length; i++) data[i] = a[i]
 }
 
-let lineFilterV = (data, N, threshold) => {
+let lineFilterV = (data, N) => {
   let a = []
   for(let i = 0; i < data.length; i += 4) a.push(0, 0, 0, 255)
   for (let y = N; y < HEIGHT - N; y += N * 2 + 1) {
@@ -166,7 +166,6 @@ let lineFilterV = (data, N, threshold) => {
         }
         // console.log(sum)
         sum /= ((N * 2 + 1) * (N * 2 + 1) + 1)
-        value = (sum > threshold)? 0 : 255
         value = sum
         for (let j = 0; j <= N; j++) {
           a[((x + 0) + (y + j) * WIDTH) * 4 + c] = value
@@ -178,7 +177,7 @@ let lineFilterV = (data, N, threshold) => {
   for (let i = 0; i < data.length; i++) data[i] = a[i]
 }
 
-let lineFilterH = (data, N, threshold) => {
+let lineFilterH = (data, N) => {
   let a = []
   for(let i = 0; i < data.length; i += 4) a.push(0, 0, 0, 255)
   for (let y = N; y < HEIGHT - N; y += N * 2 + 1) {
@@ -200,7 +199,6 @@ let lineFilterH = (data, N, threshold) => {
           }
         }
         sum /= ((N * 2 + 1) * (N * 2 + 1) + 1)
-        value = (sum > threshold)? 0 : 255
         value = sum
         for (let i = 0; i <= N; i++) {
           a[((x + i) + (y + 0) * WIDTH) * 4 + c] = value

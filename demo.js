@@ -18,6 +18,8 @@ canvas.width  = WIDTH
 canvas.height = HEIGHT
 const ctx = canvas.getContext('2d')
 
+
+
 let linePic
 let animationFlag = false
 let loop = (t) => {

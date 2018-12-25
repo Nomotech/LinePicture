@@ -88,6 +88,7 @@ class LinePic{
     this.Varray = Varray
     this.ctx = ctx
     this.imageData  = ctx.getImageData(0, 0, WIDTH, HEIGHT)
+    // this.origin = originCtx.getImageData(0, 0, WIDTH, HEIGHT)
   }
 
   animation(t) {
@@ -96,6 +97,9 @@ class LinePic{
       if (i < this.Varray.length) this.imageData.data[this.Varray[i]] -= 255
       if (i < this.Harray.length) this.imageData.data[this.Harray[i]] -= 255
     }
+
+    // for(let i = 0; i < this.imageData.data.length; i++) if (this.imageData.data[i] == 0) this.imageData.data[i] = this.origin.data[i]
+
 
     this.ctx.globalAlpha = 1
     this.ctx.putImageData(this.imageData, 0, 0)  // 画像データを出力用のcanvasに
